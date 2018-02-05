@@ -1,0 +1,102 @@
+---
+title: "Lab Week 10"
+author: "Donald Elrod"
+date: "May 24, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 2
+```{r}
+geissler=read.table("http://www.maths.usyd.edu.au/stat2011/r/geissler.txt", quote="\'",sep=",",header=T)
+```
+
+#Question 3
+```{r}
+number = geissler[,1]
+frequency = geissler[,2]
+samplen = sum(frequency)
+sampsize = sum(frequency)
+
+total = sum(number * frequency)
+x.bar = total/samplen
+
+total.sq = sum(number^2 * frequency)
+s.sq = (1/(samplen-1)) * (total.sq - (total^2)/samplen)
+
+mu = x.bar / 12
+
+sig.sq = (12 * s.sq - x.bar * (12 - x.bar) ) / (144 * 11)
+
+alpha.val = (mu * ( mu * (1 - mu) - sig.sq) ) / sig.sq
+beta.val = ( (1 - mu) * (mu * (1 - mu) - sig.sq) ) / sig.sq
+
+```
+
+#Question 4
+```{r}
+c = choose(12, number)
+probs = (c * beta(number + alpha.val, 12 - number + beta.val) ) / beta(alpha.val, beta.val)
+```
+
+following copied from lecture please don't penalize me
+
+```{r}
+OF = frequency
+EF = probs * samplen
+
+stdresiduals = (OF - EF) / sqrt(EF)
+
+stdresiduals
+
+```
+
+
+#Question 5
+
+For the most part, the standardized residuals are within an acceptable range (less than one), with the only two big outliers being the residuals for when n = 5 and n = 6, however overall I believe it fits pretty well
+
+#Question 6
+```{r}
+
+curve(dbeta(x,alpha.val,beta.val),from=0,to=1)
+
+
+
+
+```
+
+
+#Question 7
+```{r}
+
+prob.boy = pbeta(0.6,alpha.val,beta.val)-pbeta(0.4,alpha.val,beta.val)
+
+prob.boy
+
+```
+
+
+#Question 8
+*some code copied from lecture notes
+```{r}
+
+random.p = rbeta(samplen, alpha.val, beta.val)
+
+p.hat = MSE = 0
+
+for (i in 1:1000) {
+  samp = rbinom(samplen, 12, random.p)
+  m = mean(samp)
+  v = var(samp)
+  p.hat[i] = m/v
+}
+MSE = mean( (p.hat - prob.boy)^2 )
+RMSE = sqrt(MSE)
+
+RMSE
+
+```

@@ -1,0 +1,65 @@
+---
+title: "Week 6 Lab"
+author: "Donald Elrod"
+date: "April 12, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Question 1
+```{r}
+numhops = 1:12
+fq <- c(48,31,20,9,6,5,4,2,1,1,2,1)
+av = mean(fq)
+
+
+
+
+```
+
+
+
+# Question 2
+```{r}
+p.hat.obs = av
+```
+
+# Question 3
+```{r}
+B=1000
+p.hat.sim=0
+for (i in 1:B) {
+  p.hat.sim[i] = rgeom(numhops, p.hat.obs)+1
+}
+```
+
+
+
+# Question 4
+```{r}
+
+
+
+```
+
+
+
+# Question 5
+```{r}
+
+
+
+```
+
+
+
+
+
+
+
+

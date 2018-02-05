@@ -1,0 +1,149 @@
+---
+title: "Lab  Week 3"
+author: "Donald Elrod"
+date: "March 22, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+set.seed(11131996)
+```
+
+Problem 1
+```{r}
+x = 1:6
+x3 = rep(x, 36)
+```
+
+Problem 2
+```{r}
+x1 = rep(x,rep(36,6))
+```
+
+Problem 3
+```{r}
+x2 = rep(rep(x,rep(6,6)),6)
+
+```
+
+Question 4
+```{r}
+outcomes = cbind(x1, x2, x3)
+outcomes[1:13,]
+sums = apply(outcomes, 1, sum)
+```
+
+Question 5
+a.
+```{r}
+ES = mean(sums)
+ES
+```
+b.
+```{r}
+VarS = mean(sums^2) - ES^2
+VarS
+```
+c,
+```{r}
+PS15 = sum(sums >= 15)/216
+PS15 
+```
+
+Question 6
+```{r Q6}
+propns=table(sums)/length(sums)
+plot(propns,type="h")
+```
+
+Question 7
+```{r}
+n = 10
+B = 10000
+popn = 1:6
+draws = sample(size=n*B, x=popn, replace=TRUE)
+samples = matrix(draws, ncol=n, nrow=B)
+```
+
+Question 8
+```{r}
+sim.sums = apply(samples, 1, sum)
+```
+a.
+```{r}
+ES2 = mean(sim.sums)
+ES2
+```
+b.
+```{r}
+VarS2 = mean((sim.sums - mean(sim.sums))^2)
+VarS2
+```
+c.
+```{r}
+PS45 = sum(sim.sums >= 45)/10000
+PS45
+```
+
+Question 9
+```{r}
+t = table(sim.sums)
+plot(t)
+```
+
+
+Question 10
+```{r}
+plot(t / 10000, type="h")
+curve(dnorm(x,m=ES2,s=sqrt(VarS2)), add=T, col="blue")
+```
+
+Question 11
+```{r}
+clt = 1 - pnorm(45, ES2, sqrt(VarS2))
+clt
+```
+
+Question 12
+```{r}
+clt2 = 1 - pnorm(44.5, ES2, sqrt(VarS2))
+clt2
+```
+
+Question 13
+```{r}
+err = abs((clt2-clt)/clt2)
+err
+```
+
+~20% difference in values
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

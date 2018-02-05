@@ -1,0 +1,125 @@
+---
+title: "Week 4 Lab"
+author: "Donald Elrod"
+date: "April 4, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+set.seed(111396)
+```
+
+# Question 1
+```{r Q1}
+urn1 = rep(c("white", "black"), c(100,100))
+```
+
+# Question 2
+```{r Q2}
+with1 <- matrix(0,100,100)
+```
+
+# Question 3
+```{r Q3}
+for (i in 1:100) {
+  with1[,i] <- sample(x=urn1, size=100, replace=TRUE)
+}
+```
+
+# Question 4
+```{r Q4}
+Xwith1 = apply(with1[,1:100] == "white", 1, sum)
+```
+
+
+# Question 5
+```{r Q5}
+without1 <- matrix(0, 100, 100)
+for (i in 1:100) {
+  without1[,i] <- sample(x=urn1, size=100, replace=FALSE)
+}
+
+Xwithout1 = apply(without1[,1:100] == "white", 1, sum)
+
+```
+
+
+# Question 6
+```{r Q6}
+urn2 = rep(c("white", "black"), c(20, 80))
+with2 <- matrix(0, 100, 100)
+without2 <- matrix(0, 100, 100)
+for (i in 1:100) {
+  with2[,i] <- sample(x=urn2, size = 100, replace=TRUE)
+  without2[,i] <- sample(x=urn2, size=100, replace=FALSE)
+}
+
+Xwith2 = apply(with2[,1:100] == "white", 1, sum)
+
+Xwithout2 = apply(without2[,1:100] == "white", 1, sum)
+
+
+```
+
+
+# Question 7 and 8
+```{r Q7}
+par(mfrow=c(2,2))
+hist(Xwith1, breaks = 0:100, ylim = c(0, 0.25), prob = TRUE)
+hist(Xwith2, breaks = 0:100, ylim = c(0, 0.25), prob = TRUE)
+hist(Xwithout1, breaks = 0:100, ylim = c(0, 0.25), prob = TRUE)
+hist(Xwithout2, breaks = 0:100, ylim = c(0, 0.25), prob = TRUE)
+
+```
+
+
+# Question 9
+```{r}
+with1mean = mean(Xwith1)
+without1mean = mean(Xwithout1)
+with2mean = mean(Xwith2)
+without2mean = mean(Xwithout2)
+
+with1std = sd(Xwith1)
+without1std = sd(Xwithout1)
+with2std = sd(Xwith2)
+without2std = sd(Xwithout2)
+
+sprintf("Xwith1:        Mean: %.4f     Standard Deviation: %.4f", with1mean, with1std)
+
+sprintf("Xwithout1:     Mean: %.4f     Standard Deviation: %.4f", without1mean, without1std)
+
+sprintf("Xwith2:        Mean: %.4f     Standard Deviation: %.4f", with2mean, with2std)
+
+sprintf("Xwithout2:     Mean: %.4f     Standard Deviation: %.4f", without2mean, without2std)
+```
+
+  
+  
+
+# Question 10
+
+a. The means are pretty much what you would expect: for the Xwith\*1 vectors, its about 50% white, both with and without replacement. Same for the Xwith\*2 vectors, the white is about 20% as there was 20% white to begin with, with and without replacement
+
+b. The standard deviations without replacement should be larger, as the values are being removed and as such the remaining values would not be as close to each other. However, from the data found by finding the standard deviations it seems that the deviation is more dependant on sample size than whether there is replacement or not, as the Xwith\*1 series did not follow the expected result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

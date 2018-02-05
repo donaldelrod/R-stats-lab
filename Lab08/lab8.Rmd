@@ -1,0 +1,107 @@
+---
+title: "Lab Week 8"
+author: "Donald Elrod"
+date: "May 10, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 1
+```{r}
+th = (1:37)/40
+p.th = sqrt( (40*th-1)/36)
+th.hat.3=th.hat.2=MSE3=MSE2=0
+for (i in 1:37) {
+  for (j in 1:5000) {
+    pop = rep(c(p.th[i], 0.5), c(9,1))
+    random.p = sample(pop, size=100, replace=T)
+    samp = rbinom(100, 2, random.p)
+    p.3 = (mean(samp)-0.1)/1.8;
+    p.3 = min( max(0, p.3), 1)
+    th.hat.3[j] = (36*p.3^2 + 1)/40;
+    th.hat.2[j] = mean(samp==2)
+  }
+  mth3 = (th.hat.3 - th[i])^2
+  mth2 = (th.hat.2 - th[i])^2
+  MSE3[i] = mean(mth3)
+  MSE2[i] = mean(mth2)
+}
+
+ymax = max(MSE3, MSE2)
+
+plot(th, MSE3, col='blue', ylim=c(0, ymax), xlab = 'th', ylab = 'MSE values')
+points(th, MSE2, col='red')
+```
+```{r}
+summary(MSE2)
+summary(MSE3)
+```
+# Question 2
+$\theta_2$ seems a better fit for the data, as it seem more normally distributed than $\theta_3$, however $\theta_3$ is a better model in the range of ~ 0.6
+
+
+# Question 3
+```{r}
+pop = rep(c(0.7, 0.5), c(9,1))
+random.p = sample(pop, size=100, replace=T)
+samp = rbinom(100, 2, random.p)
+p = (1:49)/50
+
+binom.mix.logL=function(p,data) {
+  probdist=0.9*dbinom(data,2,p)+0.1*dbinom(data,2,0.5)
+  sum(log(probdist))
+}
+
+logL=0
+
+for(i in 1:49){
+  logL[i]=binom.mix.logL(p[i],samp)
+}
+
+plot(p, logL, type='l')
+
+
+```
+
+
+# Question 4
+```{r}
+fit = optimise(binom.mix.logL, c(0,1), data=samp, maximum=T)
+fit$max
+```
+
+# Question 5
+```{r}
+th = (1:37)/40
+p.th = sqrt( (40*th-1)/36)
+th.hat.4=MSE4=0
+for (i in 1:37) {
+  for (j in 1:5000) {
+    pop = rep(c(p.th[i], 0.5), c(9,1))
+    random.p = sample(pop, size=100, replace=T)
+    samp = rbinom(100, 2, random.p)
+    p.4 = optimise(binom.mix.logL, c(0,1), data=samp,maximum=T)$max
+    th.hat.4[j] = (36*p.4^2 + 1)/40;
+  }
+  mth4 = (th.hat.4 - th[i])^2
+  MSE4[i] = mean(mth4)
+}
+```
+
+
+```{r}
+
+ymax = max(MSE2, MSE3, MSE4)
+
+plot(th, MSE4, col='blue', ylim=c(0, ymax), xlab = 'th', ylab = 'MSE values')
+points(th, MSE2, col='red')
+points(th, MSE3, col='green')
+```
+
+# Question 6
+$\theta_2$ seems to have a better fit for the simulation when the range is ~0.5, whereas $\theta_3$ and $\theta_4$ appear to be more accurate in the range of ~0.6-7, with $\theta_3$ being closer to 0.7 and $\theta_4$ being closer to 0.6

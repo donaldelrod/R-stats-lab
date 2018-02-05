@@ -1,0 +1,29 @@
+---
+title: "Lab Week 9"
+author: "Donald Elrod"
+date: "May 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 1
+```{r}
+load(url("http://www.maths.usyd.edu.au/u/michaels/STAT2.RData"))
+
+x=c(0:10,19)
+f=clumps
+sum(f)
+
+sum(x*f)
+
+mn=sum(x*f)/sum(f)
+mn
+
+p.hat=mn/samp.var
+k.hat=(mn^2)/(samp.var-mn)
+
+
+```

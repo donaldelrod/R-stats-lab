@@ -1,0 +1,94 @@
+---
+title: "Week 5 Lab"
+author: "Donald Elrod"
+date: "April 5, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+set.seed(111396)
+```
+
+# Question 1
+```{r}
+f = c(157, 69, 35, 17, 1, 1)
+x = 0:5
+```
+
+# Question 2
+```{r}
+sample_mean = sum(f*x)/sum(f)
+sample_mean
+sample_var = sum(f*x*x)/sum(f)
+sample_var
+```
+
+
+# Question 3
+```{r}
+p.hat = sample_mean/5
+p.hat
+```
+
+# Question 4
+```{r}
+var_fit = 5*p.hat*(1-p.hat)
+var_fit
+```
+The fitted variance is much lower than the sample variance, and therefore the binomial model is not a good fit for the data
+
+# Question 5
+```{r}
+sim.vars = 0
+
+
+for (i in 1:1000) {
+  samp = rbinom(280, 5, p.hat)
+  sim.vars[i] = var(samp)
+}
+
+summary(sim.vars)
+
+
+
+boxplot(sim.vars, horizontal = T)
+```
+The range of the variances vary greatly, with the lowest being .4436 and the highest being .7956 which is almost double. Therefore the polynomial model is not a good fit for this data
+
+# Question 6
+```{r}
+E.p = sample_mean
+E.p
+Var.p = (sample_var - E.p*(1-(E.p/5)))/20
+Var.p
+
+```
+
+# Question 7
+```{r}
+z1 = (E.p + sqrt(Var.p)) * 1000
+z1
+z2 = (E.p - sqrt(Var.p)) * 1000
+z2
+
+```
+
+# Question 8
+```{r}
+Z = sample(x=c(z1,z2), size=280, replace=T)
+random.p = Z/1000
+
+final.vars = 0
+
+for (i in 1:1000) {
+  samp_8 = rbinom(280, 5, random.p)
+  final.vars[i] = var(samp_8)
+}
+summary(final.vars)
+boxplot(final.vars, horizontal = T)
+```
+There is a larger variance in the two-point distribution than there is in the random distribution, which makes sense as the values are always between one of two numbers
